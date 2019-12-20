@@ -69,16 +69,16 @@ function addItem() {
                     break;
                 case 3:
                     var minusBtn = document.createElement("button");
-                    minusBtn.setAttribute("class", "count-Btn");
+                    minusBtn.setAttribute("class", "minus-Btn");
                     minusBtn.innerHTML = "-";
                     itemCol.appendChild(minusBtn);
                     var itemNum = document.createElement("input");
                     itemNum.setAttribute("class", "item-num");
                     itemNum.setAttribute("type", "text");
-                    itemNum.value = itemInfo.count;
+                    itemNum.setAttribute("value", itemInfo.count);
                     itemCol.appendChild(itemNum);
                     var plusBtn = document.createElement("button");
-                    plusBtn.setAttribute("class", "count-Btn");
+                    plusBtn.setAttribute("class", "plus-Btn");
                     plusBtn.innerHTML = "+";
                     itemCol.appendChild(plusBtn);
                     break;
@@ -94,4 +94,20 @@ function addItem() {
 
 addItem();
 
-//minusBtn.addEventListener
+itemList.addEventListener("click", function(e) {
+    var event = e.target;
+    var eventName = event.className;
+    switch (eventName) {
+        case "minus-Btn":
+            reduce(event.nextSibling);
+            //subtotal();
+            //sum();
+    }
+})
+
+function reduce(element) {
+    element.value--;
+    if (element.value <= 0) {
+        element.parentNode.parentNode.remove();
+    }
+}

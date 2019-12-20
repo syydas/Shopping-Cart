@@ -53,7 +53,8 @@ tbody {
     text-align: right;
 }
 
-.count-Btn,
+.minus-Btn,
+.plus-Btn,
 .item-num {
     width: 25px;
     height: 25px;
