@@ -68,9 +68,19 @@ function addItem() {
                     itemCol.innerHTML = itemInfo.price;
                     break;
                 case 3:
-                    itemCol.innerHTML = '<button>-</button>' +
-                        '<input type = "text" value = "1" />' +
-                        '<button>+</button>';
+                    var minusBtn = document.createElement("button");
+                    minusBtn.setAttribute("class", "count-Btn");
+                    minusBtn.innerHTML = "-";
+                    itemCol.appendChild(minusBtn);
+                    var itemNum = document.createElement("input");
+                    itemNum.setAttribute("class", "item-num");
+                    itemNum.setAttribute("type", "text");
+                    itemNum.value = itemInfo.count;
+                    itemCol.appendChild(itemNum);
+                    var plusBtn = document.createElement("button");
+                    plusBtn.setAttribute("class", "count-Btn");
+                    plusBtn.innerHTML = "+";
+                    itemCol.appendChild(plusBtn);
                     break;
                 default:
                     var total = document.createElement("span");
@@ -83,3 +93,5 @@ function addItem() {
 }
 
 addItem();
+
+//minusBtn.addEventListener

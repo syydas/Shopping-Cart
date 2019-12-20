@@ -34,7 +34,8 @@ tfoot {
     font-weight: 700;
 }
 
-thead {
+thead,
+.count-Btn {
     background-color: #eeeeee;
 }
 
@@ -50,4 +51,15 @@ tbody {
 
 .total {
     text-align: right;
+}
+
+.count-Btn,
+.item-num {
+    width: 25px;
+    height: 25px;
+}
+
+.item-num {
+    border: 0;
+    text-align: center;
 }
