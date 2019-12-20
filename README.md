@@ -1,5 +1,5 @@
 # Shopping-Cart
-Here is a simple shopping cart about “陈情令”。    
+Here is a simple shopping cart about a stationery shop。    
     
 Function:
 - you can select items you want to buy by clicking the checkbox of each row.
