@@ -97,17 +97,33 @@ addItem();
 itemList.addEventListener("click", function(e) {
     var event = e.target;
     var eventName = event.className;
+    var tdElement = event.parentNode;
     switch (eventName) {
         case "minus-Btn":
-            reduce(event.nextSibling);
-            //subtotal();
+            reduce(tdElement);
+            subtotal(tdElement);
+            //sum();
+            break;
+        case "plus-Btn":
+            add(tdElement);
+            subtotal(tdElement);
             //sum();
     }
 })
 
 function reduce(element) {
-    element.value--;
-    if (element.value <= 0) {
-        element.parentNode.parentNode.remove();
+    element.childNodes[1].value--;
+    if (element.childNodes[1].value <= 0) {
+        element.parentNode.remove();
     }
+}
+
+function add(element) {
+    element.childNodes[1].value++;
+}
+
+function subtotal(element) {
+    var price = element.previousSibling.innerHTML;
+    var count = element.childNodes[1].value;
+    element.nextSibling.innerHTML = price * count;
 }
