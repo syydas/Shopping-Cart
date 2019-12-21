@@ -56,8 +56,9 @@ function addItem() {
                 case 0:
                     var hasSelected = itemInfo.checked ? "checked" : "";
                     var checkbox = document.createElement("input");
+                    checkbox.setAttribute("class", "select");
                     checkbox.setAttribute("type", "checkbox");
-                    checkbox.setAttribute("id", itemInfo.id);
+                    checkbox.setAttribute("name", "has-selected");
                     checkbox.checked = hasSelected;
                     itemCol.appendChild(checkbox);
                     break;
@@ -72,11 +73,11 @@ function addItem() {
                     minusBtn.setAttribute("class", "minus-Btn");
                     minusBtn.innerHTML = "-";
                     itemCol.appendChild(minusBtn);
-                    var itemNum = document.createElement("input");
-                    itemNum.setAttribute("class", "item-num");
-                    itemNum.setAttribute("type", "text");
-                    itemNum.setAttribute("value", itemInfo.count);
-                    itemCol.appendChild(itemNum);
+                    var itemCount = document.createElement("input");
+                    itemCount.setAttribute("class", "item-num");
+                    itemCount.setAttribute("type", "text");
+                    itemCount.setAttribute("value", itemInfo.count);
+                    itemCol.appendChild(itemCount);
                     var plusBtn = document.createElement("button");
                     plusBtn.setAttribute("class", "plus-Btn");
                     plusBtn.innerHTML = "+";
@@ -84,6 +85,7 @@ function addItem() {
                     break;
                 default:
                     var total = document.createElement("span");
+                    total.setAttribute("class", "total")
                     total.innerHTML = (itemInfo.price *= itemInfo.count)
                     itemCol.appendChild(total);
                     break;
@@ -94,20 +96,28 @@ function addItem() {
 
 addItem();
 
-itemList.addEventListener("click", function(e) {
+var shoppCart = document.getElementsByTagName("table")[0];
+shoppCart.addEventListener("click", function(e) {
     var event = e.target;
     var eventName = event.className;
     var tdElement = event.parentNode;
     switch (eventName) {
         case "minus-Btn":
             reduce(tdElement);
-            subtotal(tdElement);
-            //sum();
+            eachTotal(tdElement);
+            allTotal();
             break;
         case "plus-Btn":
             add(tdElement);
-            subtotal(tdElement);
-            //sum();
+            eachTotal(tdElement);
+            allTotal();
+            break;
+        case "select":
+            allTotal();
+            break;
+        case "check-all":
+            allChoose();
+            break;
     }
 })
 
@@ -122,8 +132,45 @@ function add(element) {
     element.childNodes[1].value++;
 }
 
-function subtotal(element) {
+function eachTotal(element) {
     var price = element.previousSibling.innerHTML;
     var count = element.childNodes[1].value;
-    element.nextSibling.innerHTML = price * count;
+    element.nextSibling.childNodes[0].innerHTML = price * count;
+}
+
+var selected = document.getElementsByName("has-selected");
+var totalCount = document.getElementsByClassName("totalCount");
+var totalPrice = document.getElementsByClassName("totalPrice");
+var itemCount = document.getElementsByClassName("item-num");
+var total = document.getElementsByClassName("total");
+var chooseAll = document.getElementById("check-all");
+
+function allTotal() {
+    var totalNum = 0;
+    var totalMoney = 0;
+    var count = 0;
+    for (var i = 0; i < selected.length; i++) {
+        if (selected[i].checked) {
+            totalNum += parseFloat(itemCount[i].value);
+            totalMoney += parseFloat(total[i].innerHTML);
+            count++;
+        } else {
+            count--;
+        }
+        console.log(count);
+    }
+    totalCount[0].innerHTML = totalNum;
+    totalPrice[0].innerHTML = totalMoney;
+}
+allTotal();
+
+function allChoose() {
+    for (var i = 0; i < selected.length; i++) {
+        if (chooseAll.checked) {
+            selected[i].checked = true;
+        } else {
+            selected[i].checked = false;
+        }
+    }
+    allTotal();
 }
