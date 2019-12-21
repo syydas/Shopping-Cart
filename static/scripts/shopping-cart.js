@@ -1,46 +1,46 @@
 var carProducts = [{
-        "id": 1,
-        "name": "英雄牌 钢笔",
-        "count": 1,
-        "price": 69,
-        "checked": false
+        id: 1,
+        name: "英雄牌 钢笔",
+        count: 1,
+        price: 69,
+        checked: false
     },
     {
-        "id": 2,
-        "name": "晨光牌 铅字笔",
-        "count": 2,
-        "price": 5.5,
-        "checked": true
+        id: 2,
+        name: "晨光牌 铅字笔",
+        count: 2,
+        price: 5.5,
+        checked: true
     },
     {
-        "id": 3,
-        "name": "晨光牌 铅笔",
-        "count": 1,
-        "price": 2,
-        "checked": false
+        id: 3,
+        name: "晨光牌 铅笔",
+        count: 1,
+        price: 2,
+        checked: false
     },
     {
-        "id": 4,
-        "name": "狗熊牌 橡皮擦",
-        "count": 1,
-        "price": 1,
-        "checked": false
+        id: 4,
+        name: "狗熊牌 橡皮擦",
+        count: 1,
+        price: 1,
+        checked: false
     },
     {
-        "id": 5,
-        "name": "瑞士牌 双肩书包",
-        "count": 1,
-        "price": 199,
-        "checked": true
+        id: 5,
+        name: "瑞士牌 双肩书包",
+        count: 1,
+        price: 199,
+        checked: true
     },
     {
-        "id": 6,
-        "name": "晨光牌 作业本",
-        "count": 5,
-        "price": 2.5,
-        "checked": false
+        id: 6,
+        name: "晨光牌 作业本",
+        count: 5,
+        price: 2.5,
+        checked: false
     }
-]
+];
 
 var itemList = document.getElementsByTagName("tbody")[0];
 
@@ -54,47 +54,40 @@ function addItem() {
             itemRow.appendChild(itemCol);
             switch (col) {
                 case 0:
-                    var hasSelected = itemInfo.checked ? "checked" : "";
-                    var checkbox = document.createElement("input");
-                    checkbox.setAttribute("class", "select");
-                    checkbox.setAttribute("type", "checkbox");
-                    checkbox.setAttribute("name", "has-selected");
-                    checkbox.checked = hasSelected;
-                    itemCol.appendChild(checkbox);
+                    addChecxbox(itemInfo, itemCol);
                     break;
                 case 1:
-                    itemCol.innerHTML = itemInfo.name
+                    itemCol.innerHTML = itemInfo.name;
                     break;
                 case 2:
                     itemCol.innerHTML = itemInfo.price;
                     break;
                 case 3:
-                    var minusBtn = document.createElement("button");
-                    minusBtn.setAttribute("class", "minus-Btn");
-                    minusBtn.innerHTML = "-";
-                    itemCol.appendChild(minusBtn);
-                    var itemCount = document.createElement("input");
-                    itemCount.setAttribute("class", "item-num");
-                    itemCount.setAttribute("type", "text");
-                    itemCount.setAttribute("value", itemInfo.count);
-                    itemCol.appendChild(itemCount);
-                    var plusBtn = document.createElement("button");
-                    plusBtn.setAttribute("class", "plus-Btn");
-                    plusBtn.innerHTML = "+";
-                    itemCol.appendChild(plusBtn);
+                    addItemCount(itemInfo, itemCol);
                     break;
                 default:
-                    var total = document.createElement("span");
-                    total.setAttribute("class", "total")
-                    total.innerHTML = (itemInfo.price *= itemInfo.count)
-                    itemCol.appendChild(total);
+                    addEachTotalPrice(itemInfo, itemCol);
                     break;
             }
         }
     }
 }
 
-addItem();
+function addChecxbox(info, col) {
+    var hasSelected = info.checked ? "checked" : "";
+    col.innerHTML = `<input class = "select" type = "checkbox" name = "has-selected" ${hasSelected} />`;
+}
+
+function addItemCount(info, col) {
+    col.innerHTML =
+        `<button class = "minus-Btn">-</button>` +
+        `<input class = "item-num" type = "text" value = "${info.count}" />` +
+        `<button class = "plus-Btn">+</button>`;
+}
+
+function addEachTotalPrice(info, col) {
+    col.innerHTML = `<span class = "total">${(info.price *= info.count)}<span>`;
+}
 
 var shoppCart = document.getElementsByTagName("table")[0];
 shoppCart.addEventListener("click", function(e) {
@@ -119,10 +112,11 @@ shoppCart.addEventListener("click", function(e) {
             allChoose();
             break;
     }
-})
+});
 
 function reduce(element) {
     element.childNodes[1].value--;
+    console.log(element.childNodes[1]);
     if (element.childNodes[1].value <= 0) {
         element.parentNode.remove();
     }
@@ -139,30 +133,29 @@ function eachTotal(element) {
 }
 
 var selected = document.getElementsByName("has-selected");
-var totalCount = document.getElementsByClassName("totalCount");
-var totalPrice = document.getElementsByClassName("totalPrice");
-var itemCount = document.getElementsByClassName("item-num");
-var total = document.getElementsByClassName("total");
 var chooseAll = document.getElementById("check-all");
 
 function allTotal() {
+    var totalCount = document.getElementsByClassName("total-count");
+    var totalPrice = document.getElementsByClassName("total-price");
+    var itemCount = document.getElementsByClassName("item-num");
+    var total = document.getElementsByClassName("total");
     var totalNum = 0;
     var totalMoney = 0;
-    var count = 0;
     for (var i = 0; i < selected.length; i++) {
         if (selected[i].checked) {
             totalNum += parseFloat(itemCount[i].value);
             totalMoney += parseFloat(total[i].innerHTML);
-            count++;
-        } else {
-            count--;
         }
-        console.log(count);
+    }
+    if (isAllChoose() === true) {
+        chooseAll.checked = true;
+    } else {
+        chooseAll.checked = false;
     }
     totalCount[0].innerHTML = totalNum;
     totalPrice[0].innerHTML = totalMoney;
 }
-allTotal();
 
 function allChoose() {
     for (var i = 0; i < selected.length; i++) {
@@ -174,3 +167,17 @@ function allChoose() {
     }
     allTotal();
 }
+
+function isAllChoose() {
+    var isAllSeleced = true;
+    for (var i = 0; i < selected.length; i++) {
+        if (!selected[i].checked) {
+            isAllSeleced = false;
+            break;
+        }
+    }
+    return isAllSeleced;
+}
+
+addItem();
+allTotal();
